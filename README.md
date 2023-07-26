@@ -14,9 +14,9 @@ Activate the virtual environment: source venv/bin/activate
 Install the required dependencies: pip install -r requirements.txt
 
 # Usage
-Configure the desired hyperparameters in the configuration file.
+1. Configure the desired hyperparameters in the configuration file.
+2. Choose the appropriate model from the list and run the task using the command: `python benchflow.py run <model_name> --device <gpu/cpu/xla>`
 
-Choose the appropriate model from the list and run the task using the command: python benchflow.py run <model_name> --device <gpu/cpu/xla>
 
 # License
 This project is licensed under the MIT License - see the LICENSE file for details.
