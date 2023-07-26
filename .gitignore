@@ -1,0 +1,25 @@
+# 忽略 Python 字节码文件和缓存文件
+*.pyc
+__pycache__
+
+
+# 忽略操作系统生成的文件和目录
+Thumbs.db
+
+# 忽略日志和其他临时文件
+*.log
+*.tmp
+*.bak
+*.swp
+
+# 忽略编译文件和构建目录
+*.o
+*.a
+*.so
+*.dll
+*.out
+*.pyd
+*.pyo
+*.egg-info
+dist/
+build/
