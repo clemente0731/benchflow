@@ -83,12 +83,16 @@ def find_most_likely_loss_function(dir_path):
     file_scores, all_keywords_found = get_scores(dir_path)
     sorted_file_scores = sorted(file_scores, key=lambda x: x[1], reverse=True)
 
-    if sorted_file_scores:
+    total_files = len(sorted_file_scores)
+    top_percentile = int(total_files * 0.3)
+    top_files = sorted_file_scores[:top_percentile]
+
+    if top_files:
         print("\n/*===----------------------------------------------------------------------===*/")
-        print(" * Files and their scores")
+        print(" * Files and their scores (Top 30%)")
         print("/*===----------------------------------------------------------------------===*/")
-        max_len = max(len(file_path) for file_path, _, _ in sorted_file_scores)
-        for file_path, score, keywords in sorted_file_scores:
+        max_len = max(len(file_path) for file_path, _, _ in top_files)
+        for file_path, score, keywords in top_files:
             spaces = " " * (max_len - len(file_path))
             print(f"\033[93m{file_path}{spaces}\033[0m Score: {score}")
             print(f"\tKeywords Found: {', '.join(keywords)}")
