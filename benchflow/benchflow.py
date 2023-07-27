@@ -28,7 +28,7 @@ def parse_csv_file(file_path):
         print(model_name)
 
 # Replace 'file_path' with the actual path to your CSV file
-csv_file_path = "path/to/your/csv_file.csv"
+csv_file_path = "./configs/registered_models.csv"
 parse_csv_file(csv_file_path)
 
 
