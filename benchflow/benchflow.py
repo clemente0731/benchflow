@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
+
 def parse_csv_file(file_path):
     df = pd.read_csv(file_path)
 
@@ -27,10 +28,10 @@ def parse_csv_file(file_path):
     for model_name in model_names:
         print(model_name)
 
+
 # Replace 'file_path' with the actual path to your CSV file
 csv_file_path = "./configs/registered_models.csv"
 parse_csv_file(csv_file_path)
-
 
 
 class OpenModelZooBenchmark(ABC):
@@ -132,7 +133,6 @@ def run_benchflow():
         print("Benchmarking Model B from FlagOpenFlagPerf...")
         model_b = FlagOpenFlagPerf()
         model_b.benchmark()
-
 
 
 if __name__ == "__main__":
