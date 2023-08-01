@@ -3,6 +3,7 @@ import pandas as pd
 import pkg_resources
 import os
 
+
 class ModelInfo:
     @dataclass
     class Info:
@@ -27,24 +28,45 @@ class ModelInfo:
         table_format = "{:<15} {:<25} {:<15} {:<25} {:<40} {:<10} {:<50} {:<30} {:<40} {:<60} {:<50} {:<10}"
 
         # Print the header row
-        print(table_format.format(
-            "Model ID", "Model Name", "Num Devices", "Model Classification",
-            "GitHub URL", "Commit", "Execution Path", "Download Source",
-            "Relative Directory", "Execution Command", "Environment Variables", "Src Modified"
-        ))
+        print(
+            table_format.format(
+                "Model ID",
+                "Model Name",
+                "Num Devices",
+                "Model Classification",
+                "GitHub URL",
+                "Commit",
+                "Execution Path",
+                "Download Source",
+                "Relative Directory",
+                "Execution Command",
+                "Environment Variables",
+                "Src Modified",
+            )
+        )
 
         # Print the separator row
         print("-" * 350)
 
         # Print each model's information in the table format
         for model_info in self.info:
-            print(table_format.format(
-                model_info.model_id, model_info.model_name, model_info.num_devices,
-                model_info.model_classification, model_info.github_url, model_info.commit,
-                model_info.execution_path, model_info.dataset_download_source,
-                model_info.dataset_relative_directory, model_info.execution_command,
-                model_info.environment_variables, model_info.source_code_modified
-            ))
+            print(
+                table_format.format(
+                    model_info.model_id,
+                    model_info.model_name,
+                    model_info.num_devices,
+                    model_info.model_classification,
+                    model_info.github_url,
+                    model_info.commit,
+                    model_info.execution_path,
+                    model_info.dataset_download_source,
+                    model_info.dataset_relative_directory,
+                    model_info.execution_command,
+                    model_info.environment_variables,
+                    model_info.source_code_modified,
+                )
+            )
+
 
 class ModelInfoParser:
     def __init__(self, file_path=None):
@@ -68,7 +90,9 @@ class ModelInfoParser:
         custom_file_path = os.environ.get("BENCHFLOW_CSV_FILE_PATH")
         if custom_file_path:
             return custom_file_path
-        return pkg_resources.resource_filename("benchflow", "configs/registered_models.csv")
+        return pkg_resources.resource_filename(
+            "benchflow", "configs/registered_models.csv"
+        )
 
     def read_csv_file(self, file_path=None):
         """
@@ -99,7 +123,7 @@ class ModelInfoParser:
                 dataset_relative_directory=row["dataset_relative_directory"],
                 execution_command=row["execution_command"],
                 environment_variables=row["environment_variables"],
-                source_code_modified=row["source_code_modified"]
+                source_code_modified=row["source_code_modified"],
             )
             model_info = ModelInfo(info)
             model_info_list.append(model_info)
@@ -131,19 +155,41 @@ class ModelInfoParser:
         if model_info_list is None:
             model_info_list = self.parse_csv_file()
 
-        print("{:<5} {:<20} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<100} {:<40} {:<10}".format(
-            "ID", "Name", "Num Devices", "Classification", "GitHub URL", "Commit", "Execution Path",
-            "Download Source", "Relative Directory", "Execution Command", "Environment Variables", "Source Code Modified"
-        ))
+        print(
+            "{:<5} {:<20} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<100} {:<40} {:<10}".format(
+                "ID",
+                "Name",
+                "Num Devices",
+                "Classification",
+                "GitHub URL",
+                "Commit",
+                "Execution Path",
+                "Download Source",
+                "Relative Directory",
+                "Execution Command",
+                "Environment Variables",
+                "Source Code Modified",
+            )
+        )
 
         for model_info in model_info_list:
             info = model_info.info
-            print("{:<5} {:<20} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<100} {:<40} {:<10}".format(
-                info.model_id, info.model_name, info.num_devices, info.model_classification, info.github_url,
-                info.commit, info.execution_path, info.dataset_download_source, info.dataset_relative_directory,
-                info.execution_command, info.environment_variables, info.source_code_modified
-            ))
-
+            print(
+                "{:<5} {:<20} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<100} {:<40} {:<10}".format(
+                    info.model_id,
+                    info.model_name,
+                    info.num_devices,
+                    info.model_classification,
+                    info.github_url,
+                    info.commit,
+                    info.execution_path,
+                    info.dataset_download_source,
+                    info.dataset_relative_directory,
+                    info.execution_command,
+                    info.environment_variables,
+                    info.source_code_modified,
+                )
+            )
 
     def print_model_info_list_with_pandas(self, model_info_list=None):
         """
@@ -158,15 +204,36 @@ class ModelInfoParser:
         data = []
         for model_info in model_info_list:
             info = model_info.info
-            data.append([
-                info.model_id, info.model_name, info.num_devices, info.model_classification, info.github_url,
-                info.commit, info.execution_path, info.dataset_download_source, info.dataset_relative_directory,
-                info.execution_command, info.environment_variables, info.source_code_modified
-            ])
+            data.append(
+                [
+                    info.model_id,
+                    info.model_name,
+                    info.num_devices,
+                    info.model_classification,
+                    info.github_url,
+                    info.commit,
+                    info.execution_path,
+                    info.dataset_download_source,
+                    info.dataset_relative_directory,
+                    info.execution_command,
+                    info.environment_variables,
+                    info.source_code_modified,
+                ]
+            )
 
         columns = [
-            "ID", "Name", "Num Devices", "Classification", "GitHub URL", "Commit", "Execution Path",
-            "Download Source", "Relative Directory", "Execution Command", "Environment Variables", "Source Code Modified"
+            "ID",
+            "Name",
+            "Num Devices",
+            "Classification",
+            "GitHub URL",
+            "Commit",
+            "Execution Path",
+            "Download Source",
+            "Relative Directory",
+            "Execution Command",
+            "Environment Variables",
+            "Source Code Modified",
         ]
 
         # Get the maximum length for each column
@@ -178,7 +245,7 @@ class ModelInfoParser:
             for i, value in enumerate(row):
                 str_value = str(value)
                 if len(str_value) > max_len_limit:
-                    row[i] = str_value[:max_len_limit - 3] + "..."
+                    row[i] = str_value[: max_len_limit - 3] + "..."
                 max_lengths[i] = max(max_lengths[i], len(str(row[i])))
 
         # Format the table header
@@ -188,7 +255,9 @@ class ModelInfoParser:
         # Format the table data rows
         table_rows = [header, separator]
         for row in data:
-            table_row = " | ".join(f"{str(value):<{max_lengths[i]}}" for i, value in enumerate(row))
+            table_row = " | ".join(
+                f"{str(value):<{max_lengths[i]}}" for i, value in enumerate(row)
+            )
             table_rows.append(table_row)
 
         # Print the table

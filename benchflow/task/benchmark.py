@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class OpenModelZooBenchmark(ABC):
     def benchmark(self):
         """

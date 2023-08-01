@@ -16,10 +16,15 @@ def move_configs_and_requirements():
     # 移动requirements目录到benchflow目录下
     shutil.copytree("requirements", "benchflow/requirements")
 
+
 def clean_pycache():
     for root, dirs, files in os.walk(".", topdown=False):
         for name in files:
-            if name.endswith(".pyc") or name.endswith(".pyo") or name.endswith("__pycache__"):
+            if (
+                name.endswith(".pyc")
+                or name.endswith(".pyo")
+                or name.endswith("__pycache__")
+            ):
                 os.remove(os.path.join(root, name))
                 print(f"Removed pycache file: {os.path.join(root, name)}")
         for name in dirs:
@@ -27,10 +32,12 @@ def clean_pycache():
                 os.rmdir(os.path.join(root, name))
                 print(f"Removed pycache directory: {os.path.join(root, name)}")
 
+
 def read_requirements(file_path):
     with open(file_path) as f:
         print("benchflow install_requires:", f.read().splitlines())
         return f.read().splitlines()
+
 
 def pre_setup():
     clean_pycache()

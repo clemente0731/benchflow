@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-from benchflow.task.benchmark import HuggingfaceTransformers,FlagOpenFlagPerf
+from benchflow.task.benchmark import HuggingfaceTransformers, FlagOpenFlagPerf
 from benchflow.modelzoo.model_meta import ModelInfoParser
 
 # You can use the ModelInfo class and model_info_list as needed in your benchflow.py file
@@ -27,6 +27,7 @@ Initializing... Please wait...
     """
     return logo
 
+
 def generate_model_list_logo():
     logo = """
 ███╗   ███╗ ██████╗ ██████╗ ███████╗██╗         ██╗     ██╗███████╗████████╗
@@ -37,6 +38,7 @@ def generate_model_list_logo():
 ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝    ╚══════╝╚═╝╚══════╝   ╚═╝                                                            
     """
     return logo
+
 
 def torch_collect_env_info():
     env_info = """
@@ -51,13 +53,12 @@ def torch_collect_env_info():
 **********************************************************************************                                                  
 """
     from torch.utils.collect_env import get_pretty_env_info
+
     env_info = "{}\n{}".format(env_info, get_pretty_env_info())
     return env_info
 
 
-
 def run_benchflow():
-
     import argparse
 
     benchflow_logo = generate_benchflow_logo()
@@ -101,15 +102,14 @@ def run_benchflow():
         "--keyword",
         dest="keyword",
         metavar="KEYWORD",
-        nargs='?',
-        const='',
+        nargs="?",
+        const="",
         help="Filter models by name using regex pattern KEYWORD.",
     )
     args = parser.parse_args()
 
     parser = ModelInfoParser()
     model_info_list = parser.parse_csv_file()
-
 
     if args.task == "POC":
         print("Benchmarking POC task...")
@@ -137,6 +137,6 @@ def run_benchflow():
 
         parser.print_model_info_list_with_pandas(model_info_list)
 
+
 if __name__ == "__main__":
-    
     run_benchflow()
