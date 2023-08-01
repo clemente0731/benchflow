@@ -23,3 +23,7 @@ Thumbs.db
 *.egg-info
 dist/
 build/
+
+# 忽略指定的文件和目录
+benchflow/configs/*
+benchflow/requirements/*
