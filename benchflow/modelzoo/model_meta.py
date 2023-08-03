@@ -16,6 +16,7 @@ class ModelInfo:
         execution_path: str
         dataset_download_source: str
         dataset_relative_directory: str
+        default_batch_size: int
         execution_command: str
         environment_variables: str
         source_code_modified: int
@@ -25,20 +26,21 @@ class ModelInfo:
 
     def print_info_table(self):
         # Define the table format with left alignment for headers and data
-        table_format = "{:<15} {:<25} {:<15} {:<25} {:<40} {:<10} {:<50} {:<30} {:<40} {:<60} {:<50} {:<10}"
+        table_format = "{:<5} {:<25} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<10} {:<100} {:<40} {:<10}"
 
         # Print the header row
         print(
             table_format.format(
-                "Model ID",
-                "Model Name",
+                "ID",
+                "Name",
                 "Num Devices",
-                "Model Classification",
+                "Classification",
                 "GitHub URL",
                 "Commit",
                 "Execution Path",
                 "Download Source",
                 "Relative Directory",
+                "Batch Size",
                 "Execution Command",
                 "Environment Variables",
                 "Src Modified",
@@ -61,6 +63,7 @@ class ModelInfo:
                     model_info.execution_path,
                     model_info.dataset_download_source,
                     model_info.dataset_relative_directory,
+                    model_info.default_batch_size,
                     model_info.execution_command,
                     model_info.environment_variables,
                     model_info.source_code_modified,
@@ -121,6 +124,7 @@ class ModelInfoParser:
                 execution_path=row["execution_path"],
                 dataset_download_source=row["dataset_download_source"],
                 dataset_relative_directory=row["dataset_relative_directory"],
+                default_batch_size=row["default_batch_size"],
                 execution_command=row["execution_command"],
                 environment_variables=row["environment_variables"],
                 source_code_modified=row["source_code_modified"],
@@ -156,7 +160,7 @@ class ModelInfoParser:
             model_info_list = self.parse_csv_file()
 
         print(
-            "{:<5} {:<20} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<100} {:<40} {:<10}".format(
+            "{:<5} {:<25} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<10} {:<100} {:<40} {:<10}".format(
                 "ID",
                 "Name",
                 "Num Devices",
@@ -166,6 +170,7 @@ class ModelInfoParser:
                 "Execution Path",
                 "Download Source",
                 "Relative Directory",
+                "Batch Size",
                 "Execution Command",
                 "Environment Variables",
                 "Source Code Modified",
@@ -175,7 +180,7 @@ class ModelInfoParser:
         for model_info in model_info_list:
             info = model_info.info
             print(
-                "{:<5} {:<20} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<100} {:<40} {:<10}".format(
+                "{:<5} {:<25} {:<10} {:<20} {:<60} {:<10} {:<40} {:<40} {:<40} {:<10} {:<100} {:<40} {:<10}".format(
                     info.model_id,
                     info.model_name,
                     info.num_devices,
@@ -185,6 +190,7 @@ class ModelInfoParser:
                     info.execution_path,
                     info.dataset_download_source,
                     info.dataset_relative_directory,
+                    info.default_batch_size,
                     info.execution_command,
                     info.environment_variables,
                     info.source_code_modified,
@@ -215,6 +221,7 @@ class ModelInfoParser:
                     info.execution_path,
                     info.dataset_download_source,
                     info.dataset_relative_directory,
+                    info.default_batch_size,
                     info.execution_command,
                     info.environment_variables,
                     info.source_code_modified,
@@ -231,6 +238,7 @@ class ModelInfoParser:
             "Execution Path",
             "Download Source",
             "Relative Directory",
+            "Batch Size",
             "Execution Command",
             "Environment Variables",
             "Source Code Modified",
@@ -238,7 +246,7 @@ class ModelInfoParser:
 
         # Get the maximum length for each column
         max_lengths = [len(col) for col in columns]
-        max_len_limit = 50  # Maximum allowed length for each value in the table
+        max_len_limit = 3000  # Maximum allowed length for each value in the table
 
         # Truncate long strings to max_len_limit
         for row in data:

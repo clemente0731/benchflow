@@ -1,61 +1,11 @@
 #!/usr/bin/env python
 
-
-from benchflow.task.benchmark import HuggingfaceTransformers, FlagOpenFlagPerf
-from benchflow.modelzoo.model_meta import ModelInfoParser
-
-# You can use the ModelInfo class and model_info_list as needed in your benchflow.py file
-import re
 import pandas as pd
+import re
 
-
-def generate_benchflow_logo():
-    logo = """
-**********************************************************************************
-WELCOME TO
-
-██████╗ ███████╗███╗   ██╗ ██████╗██╗  ██╗███████╗██╗      ██████╗ ██╗    ██╗
-██╔══██╗██╔════╝████╗  ██║██╔════╝██║  ██║██╔════╝██║     ██╔═══██╗██║    ██║
-██████╔╝█████╗  ██╔██╗ ██║██║     ███████║█████╗  ██║     ██║   ██║██║ █╗ ██║
-██╔══██╗██╔══╝  ██║╚██╗██║██║     ██╔══██║██╔══╝  ██║     ██║   ██║██║███╗██║
-██████╔╝███████╗██║ ╚████║╚██████╗██║  ██║██║     ███████╗╚██████╔╝╚███╔███╔╝
-╚═════╝ ╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝ 
-
-Initializing... Please wait...   
-**********************************************************************************
-                                                                                                                                                            
-    """
-    return logo
-
-
-def generate_model_list_logo():
-    logo = """
-███╗   ███╗ ██████╗ ██████╗ ███████╗██╗         ██╗     ██╗███████╗████████╗
-████╗ ████║██╔═══██╗██╔══██╗██╔════╝██║         ██║     ██║██╔════╝╚══██╔══╝
-██╔████╔██║██║   ██║██║  ██║█████╗  ██║         ██║     ██║███████╗   ██║   
-██║╚██╔╝██║██║   ██║██║  ██║██╔══╝  ██║         ██║     ██║╚════██║   ██║   
-██║ ╚═╝ ██║╚██████╔╝██████╔╝███████╗███████╗    ███████╗██║███████║   ██║   
-╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝    ╚══════╝╚═╝╚══════╝   ╚═╝                                                            
-    """
-    return logo
-
-
-def torch_collect_env_info():
-    env_info = """
-**********************************************************************************
-
-███████╗███╗   ██╗██╗   ██╗    ██╗███╗   ██╗███████╗ ██████╗ 
-██╔════╝████╗  ██║██║   ██║    ██║████╗  ██║██╔════╝██╔═══██╗
-█████╗  ██╔██╗ ██║██║   ██║    ██║██╔██╗ ██║█████╗  ██║   ██║
-██╔══╝  ██║╚██╗██║╚██╗ ██╔╝    ██║██║╚██╗██║██╔══╝  ██║   ██║
-███████╗██║ ╚████║ ╚████╔╝     ██║██║ ╚████║██║     ╚██████╔╝
-╚══════╝╚═╝  ╚═══╝  ╚═══╝      ╚═╝╚═╝  ╚═══╝╚═╝      ╚═════╝ 
-**********************************************************************************                                                  
-"""
-    from torch.utils.collect_env import get_pretty_env_info
-
-    env_info = "{}\n{}".format(env_info, get_pretty_env_info())
-    return env_info
+# from benchflow.task.benchmark import HuggingfaceTransformers, FlagOpenFlagPerf
+from benchflow.modelzoo.model_meta import ModelInfoParser
+from benchflow.utils.ascii_builder import generate_benchflow_logo, generate_model_list_logo, torch_collect_env_info
 
 
 def run_benchflow():
@@ -86,9 +36,9 @@ def run_benchflow():
     parser.add_argument(
         "-t",
         "--task",
-        choices=["POC", "benchmark", "automatic_search"],
+        choices=["poc", "benchmark", "automatic_search"],
         nargs="?",
-        help="The machine learning task to benchmark (choose from 'POC', 'benchmark', or 'automatic_search').",
+        help="The machine learning task to benchmark (choose from 'poc', 'benchmark', or 'automatic_search').",
     )
     parser.add_argument(
         "-l",
@@ -111,9 +61,9 @@ def run_benchflow():
     parser = ModelInfoParser()
     model_info_list = parser.parse_csv_file()
 
-    if args.task == "POC":
-        print("Benchmarking POC task...")
-        # Your POC benchmarking code here
+    if args.task == "poc":
+        print("Benchmarking poc task...")
+        # Your poc benchmarking code here
     elif args.task == "benchmark":
         print("Benchmarking benchmark task...")
         # Your benchmarking code here
