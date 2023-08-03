@@ -5,7 +5,11 @@ import re
 
 # from benchflow.task.benchmark import HuggingfaceTransformers, FlagOpenFlagPerf
 from benchflow.modelzoo.model_meta import ModelInfoParser
-from benchflow.utils.ascii_builder import generate_benchflow_logo, generate_model_list_logo, torch_collect_env_info
+from benchflow.utils.ascii_builder import (
+    generate_benchflow_logo,
+    generate_model_list_logo,
+    torch_collect_env_info,
+)
 
 
 def run_benchflow():
