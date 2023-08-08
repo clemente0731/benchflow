@@ -4,7 +4,7 @@ import pandas as pd
 import re
 
 # from benchflow.task.benchmark import HuggingfaceTransformers, FlagOpenFlagPerf
-from benchflow.modelzoo.model_meta import ModelInfoParser
+from benchflow.modelzoo.model_meta import ModelInfoLoader
 from benchflow.utils.ascii_builder import (
     generate_benchflow_logo,
     generate_model_list_logo,
@@ -62,8 +62,8 @@ def run_benchflow():
     )
     args = parser.parse_args()
 
-    parser = ModelInfoParser()
-    model_info_list = parser.parse_csv_file()
+    parser = ModelInfoLoader()
+    model_info_list = parser.load_model_info()
 
     if args.task == "poc":
         print("Benchmarking poc task...")
@@ -81,15 +81,19 @@ def run_benchflow():
 
         if args.keyword:
             filtered_models = []
-            parser = ModelInfoParser()
-            model_info_list = parser.parse_csv_file()
+            parser = ModelInfoLoader()
+            model_info_list = parser.load_model_info()
             for model_info in model_info_list:
                 model_name = model_info.info.model_name
                 if re.search(args.keyword, model_name, re.IGNORECASE):
                     filtered_models.append(model_info)
             model_info_list = filtered_models
 
-        parser.print_model_info_list_with_pandas(model_info_list)
+        parser.print_model_info_list(model_info_list)
+    else:
+        if args.keyword:
+            pass
+
 
 
 if __name__ == "__main__":

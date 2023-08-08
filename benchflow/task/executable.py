@@ -1,6 +1,8 @@
 # task/executable.py
 from abc import ABC, abstractmethod
-
+import subprocess
+import os
+import datetime
 
 class Executable(ABC):
     @abstractmethod
@@ -13,6 +15,26 @@ class Executable(ABC):
         """
         pass
 
+
+class TaskExecutable(Executable):
+    def execute(self, task_id, sleep_time):
+        pid = os.getpid()
+        ppid = os.getppid()
+
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        print(f"[{current_time}][p {pid}][t {task_id}] Task {task_id} started")
+
+        cmd = f"sleep {sleep_time} && echo 'Task {task_id} finished after sleeping {sleep_time} seconds'"
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        while True:
+            output = process.stdout.readline().strip()
+            if not output and process.poll() is not None:
+                break
+            if output:
+                print(f"[{current_time}][p {pid}][pp {ppid}][t {task_id}] {output}")
+
+        return process.returncode
 
 class BenchmarkTask(Executable):
     def execute(self, **kwargs):
