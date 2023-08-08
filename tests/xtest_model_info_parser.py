@@ -4,6 +4,7 @@ from io import StringIO
 from benchflow.modelzoo.model_meta import ModelInfoLoader
 from contextlib import contextmanager
 
+
 class TestModelInfoLoader(unittest.TestCase):
     @contextmanager
     def capture_output(self):
@@ -22,7 +23,7 @@ class TestModelInfoLoader(unittest.TestCase):
         # Define a mock data to use for testing
         mock_data = [
             {"model_id": "1", "name": "Model A", "type": "Type A"},
-            {"model_id": "2", "name": "Model B", "type": "Type B"}
+            {"model_id": "2", "name": "Model B", "type": "Type B"},
         ]
 
         # Create an instance of ModelInfoLoader

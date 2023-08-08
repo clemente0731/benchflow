@@ -1,6 +1,13 @@
 import random
-from benchflow.task.executable import Executable, TaskExecutable, BenchmarkTask, POCValidationTask, AutomationTask
+from benchflow.task.executable import (
+    Executable,
+    TaskExecutable,
+    BenchmarkTask,
+    POCValidationTask,
+    AutomationTask,
+)
 import multiprocessing
+
 
 class Executor:
     def __init__(self, num_processes):
@@ -16,7 +23,9 @@ class Executor:
     def run(self, executable, **kwargs):
         print("Starting processes...")
         for task_id in range(self.num_processes):
-            process = multiprocessing.Process(target=self.process_worker, args=(task_id, executable, kwargs))
+            process = multiprocessing.Process(
+                target=self.process_worker, args=(task_id, executable, kwargs)
+            )
             self.process_list.append(process)
             process.start()
 
@@ -27,6 +36,7 @@ class Executor:
         while not self.result_queue.empty():
             result = self.result_queue.get()
             print(f"Process return code: {result}")
+
 
 # class TaskExecutor(Executor):
 #     def execute(self, executable, task_id, sleep_time):

@@ -4,6 +4,7 @@ import subprocess
 import os
 import datetime
 
+
 class Executable(ABC):
     @abstractmethod
     def execute(self, **kwargs):
@@ -25,7 +26,9 @@ class TaskExecutable(Executable):
         print(f"[{current_time}][p {pid}][t {task_id}] Task {task_id} started")
 
         cmd = f"sleep {sleep_time} && echo 'Task {task_id} finished after sleeping {sleep_time} seconds'"
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        process = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+        )
 
         while True:
             output = process.stdout.readline().strip()
@@ -35,6 +38,7 @@ class TaskExecutable(Executable):
                 print(f"[{current_time}][p {pid}][pp {ppid}][t {task_id}] {output}")
 
         return process.returncode
+
 
 class BenchmarkTask(Executable):
     def execute(self, **kwargs):

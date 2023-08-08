@@ -4,7 +4,8 @@ import pkg_resources
 import os
 from pprint import pprint
 
-MAX_COL_WIDTH_LIMIT=120
+MAX_COL_WIDTH_LIMIT = 120
+
 
 class ModelInfoLoader:
     def __init__(self, csv_file_path=None):
@@ -14,7 +15,9 @@ class ModelInfoLoader:
         custom_file_path = os.environ.get("BENCHFLOW_CSV_FILE_PATH")
         if custom_file_path:
             return custom_file_path
-        return pkg_resources.resource_filename("benchflow", "configs/registered_models.csv")
+        return pkg_resources.resource_filename(
+            "benchflow", "configs/registered_models.csv"
+        )
 
     def load_model_info(self, csv_file_path=None):
         csv_file_path = csv_file_path or self.csv_file_path
@@ -41,22 +44,18 @@ class ModelInfoLoader:
 
             # If the column is "model_id", adjust the average length to prevent the serial number from being truncated
             if col == "model_id":
-                avg_length = total_length / len(model_info_list) + 5  # Add a correction to prevent truncation of the serial number
+                avg_length = (
+                    total_length / len(model_info_list) + 5
+                )  # Add a correction to prevent truncation of the serial number
             # Set the maximum column width as the minimum of the average length and the maximum width limit
             max_col_widths[col] = min(int(avg_length), MAX_COL_WIDTH_LIMIT)
 
-
-        color_map = {
-            column: f"\033[3{idx % 6}m" for idx, column in enumerate(columns)
-        }
+        color_map = {column: f"\033[3{idx % 6}m" for idx, column in enumerate(columns)}
 
         header = " | ".join(f"{col}" for col in columns)
         separator = "-" * len(header)
 
-        colored_header = " | ".join(
-            f"{color_map[col]}{col}\033[0m"
-            for col in columns
-        )
+        colored_header = " | ".join(f"{color_map[col]}{col}\033[0m" for col in columns)
 
         print(separator)
         print(colored_header)
@@ -71,4 +70,3 @@ class ModelInfoLoader:
                 colored_values.append(colored_value)
 
             print(" | ".join(colored_values))
-
