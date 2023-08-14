@@ -150,6 +150,7 @@ class Executor:
                 cwd=working_directory,
                 bufsize=1,  # 设置缓冲为line
                 universal_newlines=True,  # 为了确保输出是文本模式
+                env=os.environ.copy(),  # 与当前环境变量保持一致
             )
 
             # 逐行读取标准输出和标准错误
