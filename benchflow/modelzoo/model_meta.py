@@ -1,4 +1,3 @@
-from dataclasses import dataclass, field
 import pandas as pd
 import pkg_resources
 import os
@@ -9,9 +8,9 @@ MAX_COL_WIDTH_LIMIT = 120
 
 class ModelInfoLoader:
     def __init__(self, csv_file_path=None):
-        self.csv_file_path = csv_file_path or self.get_csv_file_path()
+        self.csv_file_path = csv_file_path or self._get_csv_file_path()
 
-    def get_csv_file_path(self):
+    def _get_csv_file_path(self):
         custom_file_path = os.environ.get("BENCHFLOW_CSV_FILE_PATH")
         if custom_file_path:
             return custom_file_path
@@ -25,9 +24,7 @@ class ModelInfoLoader:
         model_info_list = []
 
         for _, row in df.iterrows():
-            pprint(row.to_dict())
             model_info_list.append(row.to_dict())
-
         return model_info_list
 
     def print_model_info_list(self, model_info_list=None):

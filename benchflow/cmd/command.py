@@ -73,7 +73,7 @@ class Command:
 
 
 # if __name__ == "__main__":
-#     commands = ["ls -alt", "echo 'Hello World'", "ls -a"]
+#     commands = ["ls -alt", "echo 'Hello World'", "ls -a", "sleep 10", "sleep 11", "sleep 12", "sleep 13", "sleep 14", "sleep 15"]
 #     cmd = Command()
 #     results = cmd.run_commands_in_parallel(commands)
 #     for result in results:
