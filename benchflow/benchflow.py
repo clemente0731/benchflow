@@ -3,6 +3,7 @@
 import pandas as pd
 import re
 import os
+
 # from benchflow.task.benchmark import HuggingfaceTransformers, FlagOpenFlagPerf
 from benchflow.modelzoo.model_meta import ModelInfoLoader
 from benchflow.task.executable import Executable
@@ -16,6 +17,7 @@ from benchflow.utils.ascii_builder import (
 
 def run_benchflow():
     import argparse
+
     print("\nBenchflow ==> Initializing... Please wait...   ")
     benchflow_logo = generate_benchflow_logo()
     print(benchflow_logo)
@@ -79,7 +81,6 @@ def run_benchflow():
         help="Filter models by name using regex pattern KEYWORD.",
     )
 
-
     args = parser.parse_args()
 
     parser = ModelInfoLoader()
@@ -111,13 +112,11 @@ def run_benchflow():
 
         parser.print_model_info_list(model_info_list)
     else:
-        if args.keyword:
-            loader = ModelInfoLoader()
-            loader.print_model_info_list()
-            model_info = loader.load_model_info()
-            executable = Executable(model_info, args)
-            executor = Executor(executable)
-            executor.run()
+        loader = ModelInfoLoader()
+        model_info = loader.load_model_info()
+        executable = Executable(model_info, args)
+        executor = Executor(executable)
+        executor.run()
 
 
 if __name__ == "__main__":

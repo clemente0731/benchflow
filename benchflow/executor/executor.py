@@ -13,6 +13,7 @@ from pprint import pprint
 import time
 import functools
 
+
 class ExecutorLegacy:
     def __init__(self, num_processes):
         self.num_processes = num_processes
@@ -59,8 +60,6 @@ class ExecutorLegacy:
 #     print("All processes completed.")
 
 
-
-
 def time_it(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -75,8 +74,12 @@ def time_it(func):
         caller_frame = inspect.currentframe().f_back
         caller_info = inspect.getframeinfo(caller_frame)
 
-        print(f"Function '{func.__name__}' in file '{caller_info.filename}' at line {caller_info.lineno}:")
-        print(f"Start time: {start_time}, End time: {end_time}, Duration: {duration:.6f} seconds")
+        print(
+            f"Function '{func.__name__}' in file '{caller_info.filename}' at line {caller_info.lineno}:"
+        )
+        print(
+            f"Start time: {start_time}, End time: {end_time}, Duration: {duration:.6f} seconds"
+        )
 
         return result
 
@@ -146,22 +149,30 @@ class Executor:
                 executable="/bin/bash",
                 cwd=working_directory,
                 bufsize=1,  # 设置缓冲为line
-                universal_newlines=True  # 为了确保输出是文本模式
+                universal_newlines=True,  # 为了确保输出是文本模式
             )
 
             # 逐行读取标准输出和标准错误
             with process.stdout as stdout, process.stderr as stderr:
-                for line in iter(stdout.readline, ''):
-                    print(f"Task {task_id} PID={pid}, PPID={ppid}, Standard Output: {line.strip()}", flush=True)
-                for line in iter(stderr.readline, ''):
-                    print(f"Task {task_id} PID={pid}, PPID={ppid}, Standard Error: {line.strip()}", flush=True)
+                for line in iter(stdout.readline, ""):
+                    print(
+                        f"Task {task_id} PID={pid}, PPID={ppid}, Standard Output: {line.strip()}",
+                        flush=True,
+                    )
+                for line in iter(stderr.readline, ""):
+                    print(
+                        f"Task {task_id} PID={pid}, PPID={ppid}, Standard Error: {line.strip()}",
+                        flush=True,
+                    )
 
             returncode = process.wait()
 
             if returncode == 0:
                 print(f"Task {task_id}: Command executed successfully.")
             else:
-                print(f"Task {task_id}: Command execution failed with return code {returncode}.")
+                print(
+                    f"Task {task_id}: Command execution failed with return code {returncode}."
+                )
 
             return returncode
         except Exception as e:
@@ -206,8 +217,11 @@ class Executor:
 
     def _execute_task(self, task):
         import time
+
         time.sleep(0.1)
-        exec_ret = self.task_function(task['id'], task['command'], self.executable_args.workspace)
+        exec_ret = self.task_function(
+            task["id"], task["command"], self.executable_args.workspace
+        )
         print(f"Task {task['id']}-{task['model']} completed: {task['command']}")
         if exec_ret == 0:
             return "Pass"

@@ -27,6 +27,7 @@ build/
 # 忽略指定的文件和目录
 benchflow/configs/*
 benchflow/requirements/*
+run_*_script.sh
 
 # 忽略某些目录
 **/workspace/

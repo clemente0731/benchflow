@@ -9,6 +9,7 @@ from abc import ABC, abstractmethod
 import os
 import re
 
+
 class BaseExecutable(ABC):
     def execute(self):
         self._pre_execution_hook()
@@ -24,7 +25,6 @@ class BaseExecutable(ABC):
 
     def _post_execution_hook(self):
         print("Post-execution cleanup and actions")
-
 
     def benchmark(self):
         """
@@ -94,6 +94,7 @@ fi
 # 执行主要命令
 {execution_command}
 """
+
     def __init__(self, data_list, args):
         super().__init__()
         self.model_list = data_list
@@ -104,18 +105,20 @@ fi
         pass
 
     def execute(self):
-        executable_mapping = self._process_and_generate_scripts(self.model_list)
+        executable_mapping = self._process_and_generate_scripts(
+            self.model_list, self.args
+        )
         return executable_mapping
 
     @staticmethod
     def _generate_script_content(config_dict):
-        github_url = config_dict['github_url']
+        github_url = config_dict["github_url"]
         repo_name = Executable._get_repo_name(github_url)
 
-        commit_hash = config_dict['commit']
-        execution_path = config_dict['execution_path']
+        commit_hash = config_dict["commit"]
+        execution_path = config_dict["execution_path"]
         execution_command = Executable._replace_batch_size_undecided(
-            config_dict['execution_command'], config_dict['default_batch_size']
+            config_dict["execution_command"], config_dict["default_batch_size"]
         )
 
         script_content = Executable.model_train_template.format(
@@ -123,7 +126,7 @@ fi
             repo_name=repo_name,
             github_url=github_url,
             execution_path=execution_path,
-            execution_command=execution_command
+            execution_command=execution_command,
         )
         return script_content
 
@@ -131,7 +134,7 @@ fi
     def _get_repo_name(github_url):
         last_slash_index = github_url.rfind("/")
         git_extension_index = github_url.find(".git")
-        return github_url[last_slash_index + 1: git_extension_index]
+        return github_url[last_slash_index + 1 : git_extension_index]
 
     @staticmethod
     def _replace_batch_size_undecided(execution_command, default_batch_size):
@@ -139,17 +142,25 @@ fi
         return re.sub(pattern, str(default_batch_size), execution_command)
 
     @staticmethod
-    def _process_and_generate_scripts(data_list):
-        model_script_mapping = {}  # Used to collect model names and corresponding script paths
+    def _process_and_generate_scripts(data_list, args):
+        model_script_mapping = (
+            {}
+        )  # Used to collect model names and corresponding script paths
+
+        filt_word = args.keyword
 
         for config_dict in data_list:
+            if filt_word not in config_dict["model_name"]:
+                continue
             script_content = Executable._generate_script_content(config_dict)
             script_filename = f"run_{config_dict['num_devices']}_{config_dict['model_name']}_script.sh"
             script_abs_path = os.path.abspath(script_filename)
             bash_executable = f"bash {script_abs_path}"
-            model_script_mapping[config_dict["model_name"]] = bash_executable  # Update the dictionary
+            model_script_mapping[
+                config_dict["model_name"]
+            ] = bash_executable  # Update the dictionary
 
-            with open(script_filename, 'w') as script_file:
+            with open(script_filename, "w") as script_file:
                 script_file.write(script_content)
 
             print(f"Generated script: {script_abs_path}")
