@@ -150,7 +150,7 @@ fi
         filt_word = args.keyword
 
         for config_dict in data_list:
-            if filt_word not in config_dict["model_name"]:
+            if filt_word and filt_word not in config_dict['model_name']:
                 continue
             script_content = Executable._generate_script_content(config_dict)
             script_filename = f"run_{config_dict['num_devices']}_{config_dict['model_name']}_script.sh"

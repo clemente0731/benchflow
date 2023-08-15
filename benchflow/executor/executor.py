@@ -96,15 +96,20 @@ class ExecutableHandle:
 class TaskQueue:
     def __init__(self):
         self.queue = []
+        self.queue_max_len = 0
 
     def enqueue_task(self, task):
         self.queue.append(task)
+        self.queue_max_len = max(self.queue_max_len, len(self.queue))
+
+    @property
+    def max_len(self):
+        return self.queue_max_len
 
     def dequeue_task(self):
         if self.queue:
             return self.queue.pop(0)
         return None
-
 
 class ExecutionStatusManager:
     def __init__(self):
@@ -155,16 +160,10 @@ class Executor:
 
             # 逐行读取标准输出和标准错误
             with process.stdout as stdout, process.stderr as stderr:
-                for line in iter(stdout.readline, ""):
-                    print(
-                        f"Task {task_id} PID={pid}, PPID={ppid}, Standard Output: {line.strip()}",
-                        flush=True,
-                    )
-                for line in iter(stderr.readline, ""):
-                    print(
-                        f"Task {task_id} PID={pid}, PPID={ppid}, Standard Error: {line.strip()}",
-                        flush=True,
-                    )
+                for line in iter(stdout.readline, ''):
+                    print(f"Task {task_id}/{self.task_queue.max_len} PID={pid}, PPID={ppid}, stdout: {line.strip()}", flush=True)
+                for line in iter(stderr.readline, ''):
+                    print(f"Task {task_id}/{self.task_queue.max_len} PID={pid}, PPID={ppid}, stderr: {line.strip()}", flush=True)
 
             returncode = process.wait()
 
@@ -196,24 +195,32 @@ class Executor:
         return self._run_tasks()
 
     def _run_tasks(self):
+        from tqdm import tqdm
         print("== Starting task execution")
-        while True:
-            task = self.task_queue.dequeue_task()
-            if task:
-                task_id = task["id"]
-                model_name = task["model"]
-                self.status_manager.update_status(task_id, "Running")
-                print(f"\n\n-- Task {task_id} - {model_name} is now running.")
-                status_update = self._execute_task(task)
-                task_key = f"{task_id} -- {model_name}"
-                self.status_manager.update_status(task_key, status_update)
-                print(f"-- Task {task_id} - {model_name} has been completed.\n\n")
-            else:
-                print("== All tasks have been completed.")
-                for idx, ret in self.status_manager.status_map.items():
-                    if ret != "Running":
-                        print(f"idx: {idx} -- ret: {ret}")
-                break
+
+        total_tasks = len(self.task_queue.queue)
+        with tqdm(total=total_tasks) as pbar:
+            while True:
+                task = self.task_queue.dequeue_task()
+                if task:
+                    task_id = task["id"]
+                    model_name = task["model"]
+                    self.status_manager.update_status(task_id, "Running")
+                    print(f"\n\n-- Task {task_id} - {model_name} is now running.")
+                    status_update = self._execute_task(task)
+                    task_key = f"{task_id} -- {model_name}"
+                    self.status_manager.update_status(task_key, status_update)
+                    print(f"-- Task {task_id} - {model_name} has been completed.\n\n")
+
+                    pbar.update(1)  # 更新进度条
+                    pbar.set_description(f"Processing Task {task_id}/{self.task_queue.max_len} - {model_name}")  # 更新描述
+
+                else:
+                    print("== All tasks have been completed.")
+                    for idx, ret in self.status_manager.status_map.items():
+                        if ret != "Running":
+                            print(f"idx: {idx} -- ret: {ret}")
+                    break
         print("== All tasks have been completed.")
 
     def _execute_task(self, task):
